@@ -1,6 +1,7 @@
 import math
 import numpy as np 
 from scipy import linalg
+from sympy import *
 
 class Remez():
     # For a given func in an interval [a,b] and a degree n of interpolating polynomial 
@@ -27,7 +28,7 @@ class Remez():
             for j in range(1, self.n):
                 matrix_a[i].append(chebyshev_nodes[i] ** j)
             matrix_a[i].append(E * ((-1)**i))
-            # matrix_b[i] = solve_func(chebyshev_nodes[i])
+            matrix_b[i] = self.solve_func(chebyshev_nodes[i])
         
         matrix_a = np.matrix(matrix_a)
         matrix_b = np.matrix(matrix_b)
@@ -35,7 +36,10 @@ class Remez():
 
         return result
 
-    # def solve_func(self, x):
+    def solve_func(self, x_value):
+        x = symbols('x')
+        result = self.func.subs(x, x_value)
+        return result
         
     def form_polynomial(self, b_vector):
         b_vector.reverse() # get vector as [b_n, b_n-1 ... b_0]
