@@ -20,6 +20,6 @@ Then run:
     python3 run.py
 
 ## Output
-![Result](/output/remez_result.jpg)
+![Result](/output/remez_result.png)
 
 
