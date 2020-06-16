@@ -1,4 +1,5 @@
 import math
+import mpmath
 import numpy as np 
 from scipy import linalg
 from sympy import *
@@ -35,16 +36,15 @@ class Remez():
    
         matrix_a = np.array(matrix_a).astype(float)
         matrix_b = np.array(matrix_b).astype(float)
-        # print(matrix_a)
-        # print(matrix_b)
         result = linalg.solve(matrix_a, matrix_b)
-        # print(result)
 
         return list(result[:(self.n+1)]), result[self.n+1]
 
     def solve_func(self, x_value):
         x = symbols('x')
+        # result = self.func.subs(x, mpmath.radians(x_value))
         result = self.func.subs(x, x_value)
+        # print(x_value, result)
         return result
         
     def form_polynomial(self, b_vector):
