@@ -36,6 +36,8 @@ class Remez():
    
         matrix_a = np.array(matrix_a).astype(float)
         matrix_b = np.array(matrix_b).astype(float)
+        print(matrix_a)
+        print(matrix_b)
         result = linalg.solve(matrix_a, matrix_b)
 
         return list(result[:(self.n+1)]), result[self.n+1]
