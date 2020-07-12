@@ -8,30 +8,51 @@ import os
 # b = sys.argv[3]
 # degree = sys.argv[4]
 
-x = symbols('x')
+# Check for output path to put graphs
+if not os.path.isdir('output'):
+    os.mkdir('output')
+output_path = 'output/'
+
+# Define values
 func = sin(x)
+func_derivative = cos(x)
 a = 0
 b = 2*math.pi
+degree = 4
+i = 0
+loop = True
 
-for i in range(3,8,2):
-    degree = i
-    remez = Remez(func, a, b, degree)
+# Initiate remez funcs and pass throught them
+remez = Remez(func, a, b, degree)
 
-    chebyshev_nodes = remez.find_chebyshev_nodes()
+while loop == True:
+    #######   START STEP 1  ########
+    if i == 0:
+        chebyshev_nodes = remez.find_chebyshev_nodes()
+    else:
+        chebyshev_nodes = remez.get_new_chebyshev_nodes(y_error, t_error, roots)
     print("Chebyshev nodes: ", chebyshev_nodes)
+
     E = symbols('x')
     b_vector, E = remez.enforce_oscillation_criteria(chebyshev_nodes, E)
     print("B vector (from b0 to bn): ", b_vector)
     print("Error E: ", E)
+
     polynomial = remez.form_polynomial(b_vector)
-    print("First polynomial: ")
+    print("Polynomial for interaction {}: ".format(i))
     print(np.poly1d(polynomial))
 
-    if not os.path.isdir('output'):
-        os.mkdir('output')
-    output_path = 'output/remez_result{}.png'.format(degree)
-    title = 'Remez algorithm result for degree {}'.format(degree)
+    # Plot error function
+    roots = []
+    t_error = np.linspace(0, 2*math.pi, 1000)
+    y_error = np.sin(t_error) - polynomial(t_error)
+    plt.plot(t_error, y_error, 'b')
+    plt.title('Error function for iteration {}'.format(i))
+    plt.savefig(output_path+'error_function_{}.png'.format(i))
+    plt.show()
 
+    # Plot graphs
+    title = 'Remez algorithm result for interaction {}'.format(i)
     t = np.linspace(0, 2*math.pi, 400)
     y1 = polynomial(t)
     y2 = np.sin(t)
@@ -39,5 +60,21 @@ for i in range(3,8,2):
     plt.plot(t, y2, 'r', label='actual_function')
     plt.legend()
     plt.title(title)
-    plt.savefig(output_path)
+    plt.savefig(output_path+'remez_result_{}.png'.format(i))
     plt.show()
+
+    # Get E_min and E_max to test end of iteration
+    E_min = min(y_error)
+    E_max = max(y_error)
+    print("E min: ", E_min)
+    print("E_max: ", E_max)
+    if math.isclose(abs(E_max), abs(E_min), rel_tol=0.001):
+        loop = False 
+
+    #######   START STEP 2  ########
+    roots = remez.get_error_func_roots(y_error, t_error)
+    print("Error function roots: ", roots)
+
+    i += 1
+
+    
