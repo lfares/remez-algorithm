@@ -22,7 +22,7 @@ class Remez():
         
         return chebyshev_nodes
     
-    def enforce_oscillation_criteria(self, chebyshev_nodes, E):
+    def solve_system(self, chebyshev_nodes, E):
         end_iteration = self.n + 2
         matrix_a = [[1] for i in range(end_iteration)]
         matrix_b = []

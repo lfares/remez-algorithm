@@ -34,7 +34,7 @@ while loop == True:
     print("Chebyshev nodes: ", chebyshev_nodes)
 
     E = symbols('x')
-    b_vector, E = remez.enforce_oscillation_criteria(chebyshev_nodes, E)
+    b_vector, E = remez.solve_system(chebyshev_nodes, E)
     print("B vector (from b0 to bn): ", b_vector)
     print("Error E: ", E)
 
@@ -47,19 +47,22 @@ while loop == True:
     t_error = np.linspace(0, 2*math.pi, 1000)
     y_error = np.sin(t_error) - polynomial(t_error)
     plt.plot(t_error, y_error, 'b')
-    plt.title('Error function for iteration {}'.format(i))
+    plt.title('Função erro para iteração {}'.format(i))
+    plt.xlabel('x')
+    plt.ylabel('e(x) = f(x) - p(x)')
     plt.savefig(output_path+'error_function_{}.png'.format(i))
     plt.show()
 
     # Plot graphs
-    title = 'Remez algorithm result for interaction {}'.format(i)
     t = np.linspace(0, 2*math.pi, 400)
     y1 = polynomial(t)
     y2 = np.sin(t)
-    plt.plot(t, y1, 'b', label='remez_algorithm')
-    plt.plot(t, y2, 'r', label='actual_function')
+    plt.plot(t, y1, 'b', label='aproximação de remez')
+    plt.plot(t, y2, 'r', label='função real')
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
     plt.legend()
-    plt.title(title)
+    plt.title('Resultado do algoritmo de Remezes para iteração {}'.format(i))
     plt.savefig(output_path+'remez_result_{}.png'.format(i))
     plt.show()
 
