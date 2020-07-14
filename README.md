@@ -33,7 +33,7 @@ Then run:
 
 ### 3ª Iteração
 
-![Result5](/output/error_function_2.png
+![Result5](/output/error_function_2.png)
 ![Result6](/output/remez_result_2.png)
 
 ### 4ª Iteração
